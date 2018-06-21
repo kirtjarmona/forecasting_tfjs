@@ -1,0 +1,125 @@
+<html>
+<head>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/series-label.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<!-- Load TensorFlow.js -->
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.0"> </script>
+
+</head>
+
+<body style="">
+	<h4>Tiny TFJS example<hr/></h4>
+	<div id="pred1"></div><br>
+	<div id="pred2"></div><br>
+	<div id="pred3"></div><br>
+	<div id="pred4"></div><br>
+	<!-- <button onclick="">Click me</button> -->
+	<!-- predict_2([18,2]);predict_3([19,3]);predict_4([20,4]); -->
+	<script src="./index.js">
+	</script>
+	<hr>
+	<div id="container" style="max-width: 100%; height: 400px; margin: 0 auto"></div>
+	<!-- <div id="container2" style="max-width: 310px; height: 400px; margin: 0 auto"></div> -->
+	
+</body>
+<script>
+ 
+		var pred1 = document.getElementById("pred1").innerText;
+		var fix_float = parseFloat(pred1).toFixed(2);
+		var pred1_f = parseFloat(fix_float);
+
+		var pred2 = document.getElementById("pred2").innerText;
+		var fix_float = parseFloat(pred2).toFixed(2);
+		var pred2_f = parseFloat(fix_float);
+
+		var pred3 = document.getElementById("pred3").innerText;
+		var fix_float = parseFloat(pred3).toFixed(2);
+		var pred3_f = parseFloat(fix_float);
+
+		var pred4 = document.getElementById("pred4").innerText;
+		var fix_float = parseFloat(pred4).toFixed(2);
+		var pred4_f = parseFloat(fix_float);
+
+		Highcharts.chart('container', {
+		    title: {
+		        text: 'Combination chart'
+		    },
+		    xAxis: {
+		        categories: ['Apples']
+		    },
+		    labels: {
+		        items: [{
+		            html: 'Total fruit consumption',
+		            style: {
+		                left: '50px',
+		                top: '18px',
+		                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+		            }
+		        }]
+		    },
+		    series: [{
+		        type: 'column',
+		        name: 'Quater 1',
+		        data: [{y:pred1_f}]
+		    }, {
+		        type: 'column',
+		        name: 'Quater 2',
+		        data: [{y:pred2_f}]
+		    }, {
+		        type: 'column',
+		        name: 'Quater 3',
+		        data: [{y:pred3_f}]
+		    }, {
+		        type: 'column',
+		        name: 'Quater 4',
+		        data: [{y:pred4_f}]
+		    }]
+		});
+
+</script>
+
+<script>
+ // var x = document.getElementById("micro_out_div").innerText;
+ // var fix_float = parseFloat(x).toFixed(2);
+ // var xxx = parseFloat(fix_float);
+
+// Highcharts.chart('container2', {
+//     title: {
+//         text: 'Combination chart'
+//     },
+//     xAxis: {
+//         categories: ['Apples']
+//     },
+//     labels: {
+//         items: [{
+//             html: 'Total fruit consumption',
+//             style: {
+//                 left: '50px',
+//                 top: '18px',
+//                 color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+//             }
+//         }]
+//     },
+//     series: [{
+//         type: 'column',
+//         name: 'Quater 1',
+//         data: [2]
+//     }, {
+//         type: 'column',
+//         name: 'Quater 2',
+//         data: [2]
+//     }, {
+//         type: 'column',
+//         name: 'Quater 3',
+//         data: [4]
+//     }, {
+//         type: 'column',
+//         name: 'Quater 4',
+//         data: [4]
+//     }]
+// });
+
+
+</script>
+</html>

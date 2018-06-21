@@ -1,0 +1,279 @@
+{% extends 'forecast/layout.html' %}
+{% block content %}
+	<!-- <h3>{{title}}</h3> -->
+
+<ul class="nav nav-tabs">
+	<li class="active"><a data-toggle="tab" href="#graph">Graph</a></li>
+	<li><a data-toggle="tab" href="#table">Table</a></li>
+	<li><a data-toggle="tab" href="#prediction">Prediction</a></li>
+</ul>
+<div class="tab-content">
+	<div id="graph" class="tab-pane fade in active">
+		<div id="container" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+		<hr>
+		<div id="container2" style="min-width: 400px; height: 300px; margin: 0 auto"></div>
+	</div>
+	<div id="table" class="tab-pane fade">
+		<div class="container-table100">
+			<div class="wrap-table100">
+				<div class="table100 ver2 m-b-110">
+					<table data-vertable="ver2">
+						<thead>
+							<tr class="row100 head">
+								<th class="column100 column1" data-column="column1">Year</th>
+								<th class="column100 column1" data-column="column1">Quarter</th>
+								<th class="column100 column1" data-column="column1">Avg. Temperature (°C)</th>
+								<th class="column100 column1" data-column="column1">Avg. Rainfall (mm)</th>
+								<th class="column100 column1" data-column="column1">Avg. Humidity (%)</th>
+								<th class="column100 column1" data-column="column1">Avg. Visibility (km)</th>
+								<th class="column100 column1" data-column="column1">Palay Volume (Metric Tons)</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for post in data %}
+								<tr class="row100">
+									{% ifchanged post.year %}
+										<td class="column100 column1" data-column="column1">{{post.year}}</td>
+										<td class="column100 column2" data-column="column2">{{post.quarter}}</td>
+										<td class="column100 column3" data-column="column3">{{post.temperature|floatformat:0}}</td>
+										<td class="column100 column4" data-column="column4">{{post.rainfall|floatformat:2}}</td>
+										<td class="column100 column5" data-column="column5">{{post.sunshine|floatformat:2}}</td>
+										<td class="column100 column6" data-column="column6">{{post.humidity|floatformat:0}}</td>
+										<td class="column100 column7" data-column="column7">{{post.dvo_data}}</td>
+									{% else %}
+										<td class="column100 column1" data-column="column1">------</td>
+										<td class="column100 column2" data-column="column2">{{post.quarter}}</td>
+										<td class="column100 column3" data-column="column3">{{post.temperature|floatformat:0}}</td>
+										<td class="column100 column4" data-column="column4">{{post.rainfall|floatformat:2}}</td>
+										<td class="column100 column5" data-column="column5">{{post.sunshine|floatformat:2}}</td>
+										<td class="column100 column6" data-column="column6">{{post.humidity|floatformat:0}}</td>
+										<td class="column100 column7" data-column="column7">{{post.dvo_data}}</td>
+									{% endifchanged %}
+								</tr>
+							{% endfor %}
+						</tbody>
+						
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="prediction" class="tab-pane fade in active">
+	</div>
+</div>
+
+
+<script>
+
+		Highcharts.chart('container', {
+		    title: {
+		        text: 'Rice Production Volume'
+		    },
+		    xAxis: {
+		        categories: [
+		        {% for year in order_by_year_quarter %}
+			    {% ifchanged year.year %}{% spaceless %}'{{year.year}}',{% endspaceless %}{% endifchanged %}
+		        {% endfor %}]
+		    },
+		    labels: {
+		        items: [{
+		            // html: 'Prediction',
+		            style: {
+		                left: '130px',
+		                top: '150px',
+		                color: (Highcharts.theme && Highcharts.theme.textColor) || '#ff0101b3',
+
+		            }
+		        }]
+		    },
+		    "series": [
+		    	{
+		        type: 'column',
+		        name: '1st Quarter',
+		        tooltip: {valueSuffix: ' t'},
+		        data: [
+				{% if count_quarter_1|length != count_quarter_1|length %}
+						0,
+					{% for data in count_quarter_1 %}
+						{{data.dvo_data}},
+					{% endfor %}
+				{% else %}
+					{% for data in count_quarter_1 %}
+						{{data.dvo_data}},
+					{% endfor %}
+				{% endif %}
+		        ]},
+		        {
+		        type: 'column',
+		        name: '2nd Quarter',
+		        tooltip: {valueSuffix: ' t'},
+		        data: [
+		        {% if count_quarter_2|length != count_quarter_1|length %}
+					{ name: 'Prediction', y: 4810.83, color:"#ff0101b3",dataLabels: {enabled: true, label:'dsdsd'}},
+					{% for data in count_quarter_2 %}
+						{{data.dvo_data}},
+					{% endfor %}
+				{% else %}
+					{% for data in count_quarter_2 %}
+						{{data.dvo_data}},
+					{% endfor %}
+				{% endif %}
+				]},
+				{
+		        type: 'column',
+		        name: '3rd Quarter',
+		        tooltip: {valueSuffix: ' t'},
+		        data: [
+		        {% if count_quarter_3|length != count_quarter_1|length %}
+					0,
+					{% for data in count_quarter_3 %}
+						{{data.dvo_data}},
+					{% endfor %}
+				{% else %}
+					{% for data in count_quarter_3 %}
+						{{data.dvo_data}},
+					{% endfor %}
+				{% endif %}
+				]},
+				{
+		        type: 'column',
+		        name: '4th Quarter',
+		        tooltip: {valueSuffix: ' t'},
+		        data: [
+		        {% if count_quarter_4|length != count_quarter_1|length %}
+					0,
+					{% for data in count_quarter_4 %}
+						{{data.dvo_data}},
+					{% endfor %}
+				{% else %}
+					{% for data in count_quarter_4 %}
+						{{data.dvo_data}},
+					{% endfor %}
+				{% endif %}
+				]}
+		
+		    ],
+
+		});
+</script>
+
+
+<script>
+
+	Highcharts.chart('container2', {
+		    chart: {
+		        zoomType: 'xy'
+		    },
+		    title: {
+		        text: 'Average Quarterly Weather Data for Davao del Sur'
+		    },
+		    subtitle: {
+		        text: null
+		    },
+		    xAxis: [{
+		        categories: [{% for data in data %}
+								{{data.year}},
+							{% endfor %}
+							],
+		        crosshair: true
+		    }],
+		    yAxis: [{ // Primary yAxis
+		        labels: {
+		            format: '{value}°C',
+		            style: {
+		                color: Highcharts.getOptions().colors[2]
+		            }
+		        },
+		        title: {
+		            text: 'Temperature',
+		            style: {
+		                color: Highcharts.getOptions().colors[2]
+		            }
+		        },
+		        opposite: true
+
+		    }, { // Secondary yAxis
+		        gridLineWidth: 0,
+		        title: {
+		            text: 'Rainfall',
+		            style: {
+		                color: Highcharts.getOptions().colors[0]
+		            }
+		        },
+		        labels: {
+		            format: '{value} mm',
+		            style: {
+		                color: Highcharts.getOptions().colors[0]
+		            }
+		        }
+
+		    }, { // Tertiary yAxis
+		        gridLineWidth: 0,
+		        title: {
+		            text: 'Humidity',
+		            style: {
+		                color: Highcharts.getOptions().colors[1]
+		            }
+		        },
+		        labels: {
+		            format: '{value} mb',
+		            style: {
+		                color: Highcharts.getOptions().colors[1]
+		            }
+		        },
+		        opposite: true
+		    }],
+		    tooltip: {
+		        shared: true
+		    },
+		    legend: {
+		        layout: 'vertical',
+		        align: 'left',
+		        x: 80,
+		        verticalAlign: 'top',
+		        y: 55,
+		        floating: true,
+		        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+		    },
+		    series: [{
+		        name: 'Rainfall',
+		        type: 'column',
+		        yAxis: 1,
+		        data: [{% for data in data %}
+								{{data.rainfall}},
+							{% endfor %}],
+		        tooltip: {
+		            valueSuffix: ' mm'
+		        }
+
+		    }, {
+		        name: 'Humidity',
+		        type: 'spline',
+		        yAxis: 2,
+		        data: [{% for data in data %}
+								{{data.sunshine}},
+							{% endfor %}],
+		        marker: {
+		            enabled: false
+		        },
+		        dashStyle: 'shortdot',
+		        tooltip: {
+		            valueSuffix: ' mb'
+		        }
+
+		    }, {
+		        name: 'Temperature',
+		        type: 'spline',
+		        data: [{% for data in data %}
+								{{data.temperature}},
+							{% endfor %}],
+		        tooltip: {
+		            valueSuffix: ' °C'
+		        }
+		    }]
+		});
+</script>
+
+
+{% endblock %}
